@@ -1,2 +1,7 @@
 **.pdf
 .idea
+**.spec
+build
+dist
+.Rhistory
+__pycache__

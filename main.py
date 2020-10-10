@@ -129,7 +129,7 @@ def mergeAndSave():
     if pdfList:
         for pdf in pdfList:
             merger.append(pdf)
-        f = tkinter.filedialog.asksaveasfile(mode='w', defaultextension='.pdf')
+        f = tkinter.filedialog.asksaveasfile(mode='w', defaultextension='.pdf', title='Save the file', initialfile="Merged")
         print(f.name)
         if f is None:
             return
@@ -144,12 +144,25 @@ root.title("PDF Merger")
 root.geometry("600x400")
 
 root.bind('<Double-Button-1>', lambda e: lsbox.select_clear(0, tkinter.END))
+try:
+    # call a dummy dialog with an impossible option to initialize the file
+    # dialog without really getting a dialog window; this will throw a
+    # TclError, so we need a try...except :
+    try:
+        root.tk.call('tk_getOpenFile', '-foobarbaz')
+    except TclError:
+        pass
+    # now set the magic variables accordingly
+    root.tk.call('set', '::tk::dialog::file::showHiddenBtn', '1')
+    root.tk.call('set', '::tk::dialog::file::showHiddenVar', '0')
+except:
+    pass
 
-menu = tkinter.Menu(root)
-item = tkinter.Menu(menu)
-item.add_command(label="new")
-menu.add_cascade(label="new2", menu=item)
-root.config(menu=menu)
+# menu = tkinter.Menu(root)
+# item = tkinter.Menu(menu)
+# item.add_command(label="new")
+# menu.add_cascade(label="new2", menu=item)
+# root.config(menu=menu)
 
 lbl = tkinter.Label(root, text="Hello!")
 lbl.place(relx=0.5, rely=0.1, anchor=tkinter.CENTER)
